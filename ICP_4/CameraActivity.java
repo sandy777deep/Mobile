@@ -27,8 +27,11 @@ public class CameraActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQ) {
+            // Get the image using BitMap
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            // Get the view from UI using the ID to insert the image into it
             ImageView imgV = findViewById(R.id.imgView);
+            // Then display the image in the ImageView on Android Application
             imgV.setImageBitmap(bitmap);
         }
     }

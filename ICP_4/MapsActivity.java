@@ -47,8 +47,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        // Making sure that all permissions are set - If not it asks user to grant permissions for location access
         if (mLocationPermission) {
             getCurrentLocation();
+            // FINE_ACCESS is for both GPS and network provider and where as COARSE ACCESS is for network provider
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -65,6 +67,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermission = false;
+        // If permissions granted - then initialize the map
         switch (requestCode) {
             case 2345:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -136,7 +139,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     private void updateLocation(LatLng latlng, float zoom){
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,zoom));
-        // Add a marker in Sydney and move the camera
+        // Add a marker in particular lat and longitude  and then move the zoom in and zoom out
         mMap.addMarker(new MarkerOptions().position(latlng).title("Latitude : "+latlng.latitude+" "+"Longitude : "+latlng.longitude));
     }
 }

@@ -18,29 +18,34 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class StoreActivity extends AppCompatActivity {
-    EditText txtData;
-    TextView lblData;
+    EditText input;
+    TextView displayText;
     private File pathSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
-        txtData = findViewById(R.id.txtData);
-        lblData = findViewById(R.id.lblData);
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String filename = "sample" + timeStamp + ".txt";
+        // Get the edit text components
+        input = findViewById(R.id.txtData);
+        displayText = findViewById(R.id.lblData);
+        // Create files with the timestamp when the application is opened
+        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        String filename = "android" + timeStamp + ".txt";
 
+        // Get the external Path directory for saving the files
         pathSave = new File(getFilesDir(), filename);
     }
 
     public void save(View view) {
-        String text = txtData.getText().toString();
+        // Get the input entered by user
+        String text = input.getText().toString();
         FileOutputStream fos = null;
         try {
+            // Open File Stream to write the input to file in append mode
             fos = new FileOutputStream(pathSave);
             fos.write(text.getBytes());
-            txtData.getText().clear();
+            input.getText().clear();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -48,6 +53,7 @@ public class StoreActivity extends AppCompatActivity {
         } finally {
             if (fos != null) {
                 try {
+                    // Should always make sure to close the file even in case of exceptions
                     fos.close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -59,15 +65,18 @@ public class StoreActivity extends AppCompatActivity {
     public void load(View view) {
         FileInputStream fis = null;
         try {
+            // Opening file input stream to get the data from the file
             fis = new FileInputStream(pathSave);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
             String text;
+            // Reading the file contents line by line
             while ((text = br.readLine()) != null) {
                 sb.append(text).append("\n");
             }
-            lblData.setText(sb.toString());
+            // Displaying the text in the view UI
+            displayText.setText(sb.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -75,6 +84,7 @@ public class StoreActivity extends AppCompatActivity {
         } finally {
             if (fis != null) {
                 try {
+                    // Should always close the file Input stream even in case of exceptions
                     fis.close();
                 } catch (IOException e) {
                     e.printStackTrace();
